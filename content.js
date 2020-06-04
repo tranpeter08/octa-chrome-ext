@@ -1,5 +1,6 @@
 console.log('chrome extension applicable');
 
+// queries
 const listDetailQuery = '.OpenAssignmentBidOpenAssignmentDetailWorkday_View';
 const idQuery =
   '.OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value.DisplayIdentifier_Cell_Value';
@@ -12,6 +13,7 @@ const workQuery =
 const loadingQuery = '#Loading';
 const openAssignLoadingQuery = '.LoadingPanel.OpenAssignmentBidLoadingPanel';
 
+// html classes
 const fieldCellClasses =
   'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell  Field_Cell';
 const fieldCellLabelClasses =
@@ -28,15 +30,13 @@ function formatTime(str) {
   const [hr, min] = time.split(':');
 
   const h =
-    hr === '12' && ampm === 'AM'
+    time === '12:00 AM'
       ? 0
-      : hr === '12' && ampm === 'PM'
+      : time === '12:00 PM'
       ? 12
       : ampm === 'AM'
       ? parseInt(hr)
       : parseInt(hr) + 12;
-
-  console.log({time, h, min});
 
   return h * 60 + parseInt(min);
 }
@@ -51,7 +51,7 @@ function parseTotal(mins) {
   return `${Math.floor(mins / 60)}:${mins % 60}`;
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === 'clicked_browser_action') {
     // chrome.runtime.sendMessage({
     //   message: 'open_new_tab',
@@ -77,7 +77,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
     let totalMins = 0;
 
-    list.forEach(e => {
+    list.forEach((e) => {
       if (getInnerText(e, idQuery) === 'OFF') return;
 
       const startTime = getInnerText(e, startTimeQuery); // e.querySelector(startTimeQuery).innerText;
@@ -99,9 +99,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       totalMins += workTime;
 
       console.log({start, end, diff, splitTime});
-      // calculate split
-
-      // add working hours
     });
 
     console.log(parseTotal(totalMins));
