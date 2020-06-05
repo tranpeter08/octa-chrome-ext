@@ -7,7 +7,14 @@
       "matches": [
         "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid/*"
       ],
-      "js": ["content.js"]
+      "js": [
+        "styles.js",
+        "config.js",
+        "utils.js",
+        "bids.js",
+        "state.js",
+        "content.js"
+      ]
     }
   ],
   "browser_action": {

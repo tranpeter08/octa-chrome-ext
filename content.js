@@ -1,37 +1,6 @@
 console.log('Self Service Assistant enabled');
 
-// styles
-const border = 'border: 1px solid grey;border-radius: .2rem; padding: .1rem;';
-const btnStyle = 'position: fixed; bottom: 20px; right: 20px;';
-
-// queries
-const listDetailQuery = '.OpenAssignmentBidOpenAssignmentDetailWorkday_View';
-const idQuery =
-  '.OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value.DisplayIdentifier_Cell_Value';
-const startTimeQuery =
-  '.OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value.StartTime_Cell_Value';
-const endTimeQuery =
-  '.OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value.EndTime_Cell_Value';
-const workQuery =
-  '.OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value.WorkingTime_Cell_Value';
-const loadingQuery = '#Loading';
-const openAssignLoadingQuery = '.LoadingPanel.OpenAssignmentBidLoadingPanel';
-
-// field classes
-const fieldCellClasses =
-  'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell  Field_Cell';
-const fieldCellLabelClasses =
-  'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Label Cell_Label';
-const fieldCellValueClasses =
-  'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value Cell_Value';
-
-// header class
-const headerClasses =
-  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell Field_Cell';
-const headerLabelClasses =
-  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Label Cell_Label';
-const headerValueClasses =
-  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value Cell_Value';
+document.head.insertAdjacentHTML('beforeend', css);
 
 function getText(elem, query) {
   return elem.querySelector(query).innerText;
@@ -77,7 +46,7 @@ function parseTotal(mins) {
   return `${hh}h${mm}`;
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.message === 'clicked_browser_action') {
     // chrome.runtime.sendMessage({
     //   message: 'open_new_tab',
@@ -103,18 +72,22 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     let totalWork = 0;
     let totalSplit = 0;
+    const daysOff = [];
 
-    list.forEach((e) => {
+    list.forEach(e => {
       const runId = getText(e, idQuery);
 
-      if (runId === 'OFF') return;
+      if (runId === 'OFF') {
+        daysOff.push(getText(e, workdayQuery));
+        return;
+      }
 
       const startTime = getMinutes(e, startTimeQuery);
       const endTime = getMinutes(e, endTimeQuery);
       const workTime = parseWorkTime(getText(e, workQuery));
       const splitTime = endTime - startTime - workTime;
 
-      e.insertAdjacentHTML(
+      e.querySelector(detailViewQuery).insertAdjacentHTML(
         'beforeend',
         `<span style="${border}" class="${fieldCellClasses}">
           <span class="${fieldCellLabelClasses}">Splits: </span>  
@@ -126,9 +99,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       totalWork += workTime;
     });
 
-    const header = document.querySelector(
-      '.OpenAssignmentBidOpenAssignmentDetailHeader_View'
-    );
+    const header = document.querySelector(headerQuery);
+    const bidId = getText(document, assignmentQuery);
+    totalSplit = parseTotal(totalSplit);
+    totalWork = parseTotal(totalWork);
 
     if (!header) {
       alert('error');
@@ -140,14 +114,32 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       `<div id="moonshine"></div>
       <div style="${border}" class="${headerClasses}">
         <div class="${headerLabelClasses}">Total Work Time: </div>
-        <div class="${headerValueClasses}">${parseTotal(totalWork)}</div>
+        <div class="${headerValueClasses}">${totalWork}</div>
       </div>
       <div style="${border}" class="${headerClasses}">
         <div class="${headerLabelClasses}">Total Split Time: </div>
-        <div class="${headerValueClasses}">${parseTotal(totalSplit)}</div>
+        <div class="${headerValueClasses}">${totalSplit}</div>
       </div>
-      <button id="toggle-menu" style="${btnStyle}">SAVE</button>
+      <button id="toggle-menu">MENU</button>
+      <div id="SSA-container" class="hidden">
+        <button id="close-menu">CLOSE</button>
+
+        <h2>Saved Bids</h2>
+        <ul id="bids-container"></ul>
+
+        <button id="save-run">SAVE</button>
+      </div>
       `
     );
+
+    State.data = {
+      bidId,
+      totalWork,
+      totalSplit,
+      daysOff
+    };
+
+    Utils.addEventListeners();
+    Utils.renderBids();
   }
 });
