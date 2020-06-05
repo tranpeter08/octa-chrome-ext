@@ -2,6 +2,7 @@ console.log('Self Service Assistant enabled');
 
 // styles
 const border = 'border: 1px solid grey;border-radius: .2rem; padding: .1rem;';
+const btnStyle = 'position: fixed; bottom: 20px; right: 20px;';
 
 // queries
 const listDetailQuery = '.OpenAssignmentBidOpenAssignmentDetailWorkday_View';
@@ -83,6 +84,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     //   url: 'http://google.com'
     // });
 
+    if (document.querySelector('#moonshine')) return;
+
     if (
       document.querySelector(loadingQuery).style.display !== 'none' ||
       document.querySelector(openAssignLoadingQuery)
@@ -98,15 +101,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       return;
     }
 
-    let totalMins = 0;
+    let totalWork = 0;
+    let totalSplit = 0;
 
     list.forEach((e) => {
-      if (getText(e, idQuery) === 'OFF') return;
+      const runId = getText(e, idQuery);
+
+      if (runId === 'OFF') return;
 
       const startTime = getMinutes(e, startTimeQuery);
       const endTime = getMinutes(e, endTimeQuery);
       const workTime = parseWorkTime(getText(e, workQuery));
-
       const splitTime = endTime - startTime - workTime;
 
       e.insertAdjacentHTML(
@@ -117,7 +122,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       </span>`
       );
 
-      totalMins += workTime;
+      totalSplit += splitTime;
+      totalWork += workTime;
     });
 
     const header = document.querySelector(
@@ -131,10 +137,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
     header.insertAdjacentHTML(
       'beforeend',
-      `<div style="${border}" class="${headerClasses}">
+      `<div id="moonshine"></div>
+      <div style="${border}" class="${headerClasses}">
         <div class="${headerLabelClasses}">Total Work Time: </div>
-        <div class="${headerValueClasses}">${parseTotal(totalMins)}</div>
-    </div>`
+        <div class="${headerValueClasses}">${parseTotal(totalWork)}</div>
+      </div>
+      <div style="${border}" class="${headerClasses}">
+        <div class="${headerLabelClasses}">Total Split Time: </div>
+        <div class="${headerValueClasses}">${parseTotal(totalSplit)}</div>
+      </div>
+      <button id="toggle-menu" style="${btnStyle}">SAVE</button>
+      `
     );
   }
 });

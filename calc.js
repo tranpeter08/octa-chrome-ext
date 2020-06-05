@@ -4,7 +4,6 @@ let end = '12:00 AMx';
 function formatTime(str) {
   const [time, ampm] = str.split(' ');
   const [hr, min] = time.split(':');
-
   const h = parseInt(hr);
 
   const hh =
@@ -19,8 +18,6 @@ function formatTime(str) {
       : ampm === 'PM'
       ? h + 12
       : h + 24;
-
-  console.log({h, hh, str});
 
   return hh * 60 + parseInt(min);
 }

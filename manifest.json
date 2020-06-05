@@ -5,7 +5,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid"
+        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid/*"
       ],
       "js": ["content.js"]
     }
