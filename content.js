@@ -1,4 +1,7 @@
-console.log('chrome extension applicable');
+console.log('Self Service Assistant enabled');
+
+// styles
+const border = 'border: 1px solid grey;border-radius: .2rem; padding: .1rem;';
 
 // queries
 const listDetailQuery = '.OpenAssignmentBidOpenAssignmentDetailWorkday_View';
@@ -13,7 +16,7 @@ const workQuery =
 const loadingQuery = '#Loading';
 const openAssignLoadingQuery = '.LoadingPanel.OpenAssignmentBidLoadingPanel';
 
-// html classes
+// field classes
 const fieldCellClasses =
   'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell  Field_Cell';
 const fieldCellLabelClasses =
@@ -21,24 +24,43 @@ const fieldCellLabelClasses =
 const fieldCellValueClasses =
   'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value Cell_Value';
 
-function getInnerText(elem, query) {
+// header class
+const headerClasses =
+  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell Field_Cell';
+const headerLabelClasses =
+  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Label Cell_Label';
+const headerValueClasses =
+  'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value Cell_Value';
+
+function getText(elem, query) {
   return elem.querySelector(query).innerText;
 }
 
 function formatTime(str) {
   const [time, ampm] = str.split(' ');
   const [hr, min] = time.split(':');
+  const h = parseInt(hr);
 
-  const h =
-    time === '12:00 AM'
-      ? 0
-      : time === '12:00 PM'
-      ? 12
+  const hh =
+    h === 12
+      ? ampm === 'AMx'
+        ? 24
+        : ampm === 'AM'
+        ? 0
+        : h
       : ampm === 'AM'
-      ? parseInt(hr)
-      : parseInt(hr) + 12;
+      ? h
+      : ampm === 'PM'
+      ? h + 12
+      : h + 24;
 
-  return h * 60 + parseInt(min);
+  return hh * 60 + parseInt(min);
+}
+
+function getMinutes(elem, query) {
+  const str = getText(elem, query);
+
+  return formatTime(str);
 }
 
 function parseWorkTime(str) {
@@ -48,7 +70,10 @@ function parseWorkTime(str) {
 }
 
 function parseTotal(mins) {
-  return `${Math.floor(mins / 60)}:${mins % 60}`;
+  const hh = Math.floor(mins / 60);
+  const mm = mins % 60;
+
+  return `${hh}h${mm}`;
 }
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
@@ -57,8 +82,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     //   message: 'open_new_tab',
     //   url: 'http://google.com'
     // });
-
-    console.log('hello');
 
     if (
       document.querySelector(loadingQuery).style.display !== 'none' ||
@@ -78,29 +101,40 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     let totalMins = 0;
 
     list.forEach((e) => {
-      if (getInnerText(e, idQuery) === 'OFF') return;
+      if (getText(e, idQuery) === 'OFF') return;
 
-      const startTime = getInnerText(e, startTimeQuery); // e.querySelector(startTimeQuery).innerText;
-      const endTime = getInnerText(e, endTimeQuery); //e.querySelector(endTimeQuery).innerText;
-      const workTime = parseWorkTime(getInnerText(e, workQuery)); //e.querySelector(workQuery).innerText;
+      const startTime = getMinutes(e, startTimeQuery);
+      const endTime = getMinutes(e, endTimeQuery);
+      const workTime = parseWorkTime(getText(e, workQuery));
 
-      // format time, convert to minutes
-      const start = formatTime(startTime);
-      const end = formatTime(endTime);
+      const splitTime = endTime - startTime - workTime;
 
-      let diff = end - start;
-
-      if (!Math.sign(diff)) {
-        diff = end + start;
-      }
-
-      const splitTime = diff - workTime;
+      e.insertAdjacentHTML(
+        'beforeend',
+        `<span style="${border}" class="${fieldCellClasses}">
+          <span class="${fieldCellLabelClasses}">Splits: </span>  
+          <span class="${fieldCellValueClasses}">${parseTotal(splitTime)}</span>
+      </span>`
+      );
 
       totalMins += workTime;
-
-      console.log({start, end, diff, splitTime});
     });
 
-    console.log(parseTotal(totalMins));
+    const header = document.querySelector(
+      '.OpenAssignmentBidOpenAssignmentDetailHeader_View'
+    );
+
+    if (!header) {
+      alert('error');
+      return;
+    }
+
+    header.insertAdjacentHTML(
+      'beforeend',
+      `<div style="${border}" class="${headerClasses}">
+        <div class="${headerLabelClasses}">Total Work Time: </div>
+        <div class="${headerValueClasses}">${parseTotal(totalMins)}</div>
+    </div>`
+    );
   }
 });

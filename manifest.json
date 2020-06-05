@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "name": "My Cool Extension",
+  "name": "Self-Service Assistant",
   "version": "0.1",
   "content_scripts": [
     {
@@ -15,5 +15,6 @@
   },
   "background": {
     "scripts": ["background.js"]
-  }
+  },
+  "permissions": ["storage", "declarativeContent", "activeTab"]
 }
