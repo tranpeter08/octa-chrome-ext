@@ -1,22 +1,32 @@
 class Bids {
-  static findBid(bids = [], id) {
+  static async findBid(id) {
+    const bids = await Bids.getBids();
+
     return bids.find(b => b.bidId === id);
   }
 
   static getBids() {
-    return chrome.storage.sync.get('bids', function({bids}) {
-      return bids;
+    return new Promise((resolve, rej) => {
+      chrome.storage.sync.get('bids', function({bids}) {
+        resolve(bids);
+      });
     });
   }
 
-  static addBid(bid) {
-    const bids = Bids.getBids();
+  static async addBid(bid) {
+    const bids = await Bids.getBids();
+    const match = bids.find(b => b.bidId === bid.bidId);
 
-    if (!Bids.findBid(bids, bid.bidId)) {
+    if (match) {
       alert('Assignment already saved');
       return;
     }
 
     chrome.storage.sync.set({bids: [...bids, bid]});
+    Utils.renderBids();
+  }
+
+  static deleteAll() {
+    chrome.storage.sync.set({bids: []});
   }
 }

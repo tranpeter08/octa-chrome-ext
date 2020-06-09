@@ -1,4 +1,5 @@
 // queries
+const openAssignmentTitleQuery = '.OpenAssignmentDetailTitle';
 const headerQuery = '.OpenAssignmentBidOpenAssignmentDetailHeader_View';
 const listDetailQuery = '.OpenAssignmentDetailWorkdayHeader';
 const idQuery =
@@ -16,6 +17,7 @@ const loadingQuery = '#Loading';
 const openAssignLoadingQuery = '.LoadingPanel.OpenAssignmentBidLoadingPanel';
 const assignmentQuery =
   '.OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value.OpenAssignment_OCTANumber_Cell_Value.Cell_Value';
+const closeQuery = '.CloseButton.DetailButton';
 
 // field classes
 const fieldCellClasses =

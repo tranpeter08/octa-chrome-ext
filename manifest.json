@@ -5,16 +5,17 @@
   "content_scripts": [
     {
       "matches": [
-        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid/*"
+        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid"
       ],
       "js": [
-        "styles.js",
         "config.js",
         "utils.js",
         "bids.js",
         "state.js",
+        "components.js",
         "content.js"
-      ]
+      ],
+      "css": ["style.css"]
     }
   ],
   "browser_action": {

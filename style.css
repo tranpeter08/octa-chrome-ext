@@ -1,0 +1,111 @@
+#SSA-container {
+  font-family: Arial, 'Segoe UI', Verdana, Sans-Serif;
+}
+
+.menu-title {
+  text-align: center;
+}
+
+.ssa-field-cell {
+  border: 1px solid grey;
+  border-radius: 0.2rem;
+  padding: 0.1rem;
+}
+
+.ssa-button {
+  background-color: #0159c6;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+  padding: 5px;
+  font-family: Arial, 'Segoe UI', Verdana, Sans-Serif;
+}
+
+#SSA-menu {
+  position: fixed;
+  border: 1px solid grey;
+  bottom: 20px;
+  left: 20px;
+  background-color: white;
+}
+
+#toggle-menu {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+}
+
+#menu-close {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+#bids-container {
+  width: 300px;
+  height: 200px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+#bids-container > li {
+  list-style-type: none;
+  margin-bottom: 10px;
+  background-color: #fff3d3;
+  padding: 10px 6px;
+}
+
+.bid-item {
+  display: grid;
+  grid-gap: 6px 6px;
+  grid-template-columns: 26px auto;
+  grid-template-rows: auto;
+  grid-template-areas: 'index bidDetailContainer';
+}
+
+.bid-item-index {
+  grid-area: index;
+}
+
+.bid-item-detail-container {
+  grid-area: bidDetailContainer;
+
+  display: grid;
+  grid-gap: 6px 6px;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    'bidId bidId'
+    'work split'
+    'daysOff daysOff';
+}
+
+.bid-item-grid-1 {
+  grid-area: bidId;
+}
+
+.bid-item-grid-2 {
+  grid-area: work;
+}
+
+.bid-item-grid-3 {
+  grid-area: split;
+}
+
+.bid-item-grid-4 {
+  grid-area: daysOff;
+}
+
+.bid-item-value {
+  font-weight: bold;
+}
+
+#menu-button-container {
+  padding: 10px;
+}
+
+.hidden {
+  display: none;
+}
