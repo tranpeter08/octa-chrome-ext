@@ -40,15 +40,13 @@ class Utils {
     }
 
     const bidId = getText(document, assignmentQuery);
-    const match = await Bids.findBid(bidId);
+    await Utils.scrapePage(bidId);
 
-    if (match) {
+    if (await Bids.findBid(bidId)) {
       alert('Bid already saved to favorites');
     } else {
-      Bids.addBid(State.data);
+      await Bids.addBid(State.data);
     }
-
-    await Utils.scrapePage(bidId);
   }
 
   static toggleMenu() {

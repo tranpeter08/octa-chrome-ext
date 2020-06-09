@@ -2,7 +2,7 @@ class Bids {
   static async findBid(id) {
     const bids = await Bids.getBids();
 
-    return bids.find(b => b.bidId === id);
+    return bids.find(b => b && b.bidId === id);
   }
 
   static getBids() {
@@ -14,6 +14,10 @@ class Bids {
   }
 
   static async addBid(bid) {
+    if (!bid) {
+      console.error('Missing bid');
+      return;
+    }
     const bids = await Bids.getBids();
     const match = bids.find(b => b.bidId === bid.bidId);
 

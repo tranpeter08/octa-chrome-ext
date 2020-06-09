@@ -1,11 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Self-Service Assistant",
+  "name": "Self-Service Open Assignment Assistant",
   "version": "0.1",
   "content_scripts": [
     {
       "matches": [
-        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid"
+        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid",
+        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid?divisionIdentifier=OCTA"
       ],
       "js": [
         "config.js",

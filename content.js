@@ -1,6 +1,8 @@
-console.log('Self Service Assistant enabled');
+console.log('Self-Service Assistant enabled');
 
-// document.head.insertAdjacentHTML('beforeend', css);
+window.addEventListener('load', () => {
+  console.log('LOADED');
+});
 
 function getText(elem, query) {
   const e = elem.querySelector(query);
@@ -61,7 +63,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //   url: 'http://google.com'
     // });
 
-    if (document.querySelector('#moonshine')) return;
+    const bidId = getText(document, assignmentQuery);
+
+    if (bidId) Utils.scrapePage(bidId);
 
     if (
       document.querySelector(loadingQuery).style.display !== 'none' ||
@@ -71,7 +75,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       return;
     }
 
-    Utils.renderMenu();
-    Utils.addEventListeners();
+    if (!document.getElementById('SSA-container')) {
+      Utils.renderMenu();
+      Utils.addEventListeners();
+    }
   }
 });
