@@ -1,9 +1,5 @@
 console.log('Self-Service Assistant enabled');
 
-window.addEventListener('load', () => {
-  console.log('LOADED');
-});
-
 function getText(elem, query) {
   const e = elem.querySelector(query);
 
@@ -63,10 +59,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //   url: 'http://google.com'
     // });
 
-    const bidId = getText(document, assignmentQuery);
-
-    if (bidId) Utils.scrapePage(bidId);
-
     if (
       document.querySelector(loadingQuery).style.display !== 'none' ||
       document.querySelector(openAssignLoadingQuery)
@@ -74,6 +66,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       alert('Please wait for the page to finish loading...');
       return;
     }
+
+    const bidId = getText(document, assignmentQuery);
+
+    if (bidId) Utils.scrapePage(bidId);
 
     if (!document.getElementById('SSA-container')) {
       Utils.renderMenu();
