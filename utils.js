@@ -6,6 +6,13 @@ class Utils {
     );
   }
 
+  static renderFieldCells(e, splitTime) {
+    e.querySelector(detailViewQuery).insertAdjacentHTML(
+      'beforeend',
+      Components.FieldCells(splitTime)
+    );
+  }
+
   static renderMenu() {
     document.body.insertAdjacentHTML('beforeend', Components.Menu());
     Utils.renderBids();
@@ -22,13 +29,6 @@ class Utils {
 
     const elems = bids.map((b, i) => Components.BidItem(b, i));
     container.innerHTML = elems.join('');
-  }
-
-  static addEventListeners() {
-    document.getElementById('save-run').onclick = Utils.saveBtnClk;
-    document.getElementById('toggle-menu').onclick = Utils.toggleMenu;
-    document.getElementById('menu-close').onclick = Utils.toggleMenu;
-    document.getElementById('menu-clear').onclick = Utils.clearBids;
   }
 
   static async saveBtnClk() {
@@ -123,10 +123,10 @@ class Utils {
     }
   }
 
-  static renderFieldCells(e, splitTime) {
-    e.querySelector(detailViewQuery).insertAdjacentHTML(
-      'beforeend',
-      Components.FieldCells(splitTime)
-    );
+  static addEventListeners() {
+    document.getElementById('save-run').onclick = Utils.saveBtnClk;
+    document.getElementById('toggle-menu').onclick = Utils.toggleMenu;
+    document.getElementById('menu-close').onclick = Utils.toggleMenu;
+    document.getElementById('menu-clear').onclick = Utils.clearBids;
   }
 }

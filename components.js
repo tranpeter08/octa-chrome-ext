@@ -43,10 +43,16 @@ class Components {
   }
 
   static NoBids() {
-    return `<span> - No bids saved - </span>`;
+    return `<div class="no-bids"> - No bids saved - </div>`;
   }
 
-  static HeaderCells(totalWork, totalSplit) {
+  static HeaderCells(
+    totalWork,
+    totalSplit,
+    headerClass,
+    labelClasses,
+    valueClasses
+  ) {
     return `<div id="moonshine"></div>
       <div class="${headerClasses} ssa-field-cell">
         <div class="${headerLabelClasses}">Total Work Time: </div>
@@ -59,7 +65,7 @@ class Components {
     `;
   }
 
-  static FieldCells(splitTime) {
+  static FieldCells(splitTime, cellClasses, labelClasses, valueClasses) {
     return `<span class="${fieldCellClasses} ssa-field-cell">
       <span class="${fieldCellLabelClasses}">Splits: </span>  
       <span class="${fieldCellValueClasses}">${parseTotal(splitTime)}</span>
