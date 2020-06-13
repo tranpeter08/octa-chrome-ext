@@ -1,6 +1,9 @@
 chrome.storage.sync.get('bids', function(res) {
-  if (!res.bids) {
-    chrome.storage.sync.set({bids: []});
+  if (!res) {
+    chrome.storage.sync.set({
+      openAssign: [],
+      workBid: []
+    });
   }
 });
 

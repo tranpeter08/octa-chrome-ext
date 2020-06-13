@@ -71,4 +71,18 @@ class Components {
       <span class="${fieldCellValueClasses}">${parseTotal(splitTime)}</span>
     </span>`;
   }
+
+  static Favorites() {
+    return `<div id="ssa-app">
+          <fav-open 
+            :show_menu="showMenu" 
+            :onclick="toggleMenu">
+          </fav-open>
+
+          <fav-menu 
+            :onclose="toggleMenu"
+            :show_menu="showMenu">
+          </fav-menu>
+        </div>`;
+  }
 }

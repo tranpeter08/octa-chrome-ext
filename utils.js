@@ -130,3 +130,73 @@ class Utils {
     document.getElementById('menu-clear').onclick = Utils.clearBids;
   }
 }
+
+function getText(elem, query) {
+  const e = elem.querySelector(query);
+
+  if (!e) {
+    console.log(`query error: ${query}`);
+    return null;
+  }
+
+  return e.innerText;
+}
+
+function formatTime(str) {
+  const [time, ampm] = str.split(' ');
+  const [hr, min] = time.split(':');
+  const h = parseInt(hr);
+
+  const hh =
+    h === 12
+      ? ampm === 'AMx'
+        ? 24
+        : ampm === 'AM'
+        ? 0
+        : h
+      : ampm === 'AM'
+      ? h
+      : ampm === 'PM'
+      ? h + 12
+      : h + 24;
+
+  return hh * 60 + parseInt(min);
+}
+
+function getMinutes(elem, query) {
+  const str = getText(elem, query);
+  if (!str) return null;
+
+  return formatTime(str);
+}
+
+function parseWorkTime(str) {
+  const [h, m] = str.split('h');
+
+  return parseInt(h) * 60 + parseInt(m);
+}
+
+function parseTotal(mins) {
+  const hh = Math.floor(mins / 60);
+  const mm = mins % 60;
+
+  return `${hh}h${mm}`;
+}
+
+function renderFavorites() {
+  document.body.insertAdjacentHTML('beforeend', Components.Favorites());
+
+  const app = new Vue({
+    el: '#ssa-app',
+    data: {
+      data: null,
+      showMenu: false,
+      list: []
+    },
+    methods: {
+      toggleMenu() {
+        this.showMenu = !this.showMenu;
+      }
+    }
+  });
+}

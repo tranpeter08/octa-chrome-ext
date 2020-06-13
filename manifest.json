@@ -4,12 +4,10 @@
   "version": "0.1",
   "content_scripts": [
     {
-      "matches": [
-        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid",
-        "https://coachopselfserv.octa.net/SelfService/Bid/OpenAssignmentBid?divisionIdentifier=OCTA"
-      ],
+      "matches": ["https://coachopselfserv.octa.net/SelfService/Bid/*"],
       "js": [
         "vue.js",
+        "templates.js",
         "config.js",
         "utils.js",
         "bids.js",

@@ -34,3 +34,8 @@ const headerLabelClasses =
   'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Label Cell_Label';
 const headerValueClasses =
   'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value Cell_Value';
+
+// july 2020 bid
+const menuTitle = '.MainMenuCurrentItem.MainMenuClose';
+const workBidId =
+  '.WorkBidWorkDetailHeader_Cell_Value Position_OCTANumber_Cell_Value.Cell_Value';
