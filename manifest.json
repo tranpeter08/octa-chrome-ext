@@ -9,7 +9,7 @@
         "http://127.0.0.1:5500/*"
       ],
       "js": [
-        "vue.js",
+        "vue.min.js",
         "templates.js",
         "config.js",
         "dom.js",
