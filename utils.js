@@ -1,46 +1,15 @@
 class Utils {
-  static renderHeaderCells(header, totalWork, totalSplit) {
-    header.insertAdjacentHTML(
-      'beforeend',
-      Components.HeaderCells(totalWork, totalSplit)
-    );
-  }
-
-  static renderFieldCells(e, splitTime) {
-    e.querySelector(detailViewQuery).insertAdjacentHTML(
-      'beforeend',
-      Components.FieldCells(splitTime)
-    );
-  }
-
-  static renderMenu() {
-    document.body.insertAdjacentHTML('beforeend', Components.Menu());
-    Utils.renderBids();
-  }
-
-  static async renderBids() {
-    const bids = await Bids.getBids();
-    const container = document.getElementById('bids-container');
-
-    if (!bids || !bids.length) {
-      container.innerHTML = Components.NoBids();
-      return;
-    }
-
-    const elems = bids.map((b, i) => Components.BidItem(b, i));
-    container.innerHTML = elems.join('');
-  }
-
   static async saveBtnClk() {
-    const title = document.querySelector(openAssignmentTitleQuery);
+    // const title = document.querySelector(this.parseClxsStr(State.settings.fieldClasses.parent));
+    const bidId = getText(document, State.settings.bidIdQ);
 
-    if (!title) {
+    if (!bidId) {
       alert('Please select an assignment.');
       return;
     }
 
-    const bidId = getText(document, assignmentQuery);
-    await Utils.scrapePage(bidId);
+    // const bidId = getText(document, State.settings.bidIdQ);
+    await DOM.scrape(bidId);
 
     if (await Bids.findBid(bidId)) {
       alert('Bid already saved to favorites');
@@ -49,154 +18,80 @@ class Utils {
     }
   }
 
-  static toggleMenu() {
-    const menu = document.getElementById('SSA-menu');
-    const menuBtn = document.getElementById('toggle-menu');
+  static async configureApp() {
+    const {queries} = Config;
 
-    menuBtn.classList.toggle('hidden');
-    menu.classList.toggle('hidden');
-  }
+    for (let i = 0; i < queries.length; i++) {
+      const q = queries[i];
+      const bidId = document.querySelector(q.bidIdQ);
+      const favorites = document.getElementById('ssa-app');
 
-  static clearBids() {
-    Bids.deleteAll();
-    Utils.renderBids();
-  }
-
-  static async scrapePage(bidId) {
-    const moon = document.querySelector('#moonshine');
-    const header = document.querySelector(headerQuery);
-
-    if (!header) {
-      return;
-    }
-
-    const list = document.querySelectorAll(listDetailQuery);
-
-    if (!list.length) {
-      alert('Error :(');
-      return;
-    }
-
-    let totalSplit = 0;
-    let totalWork = 0;
-    let daysOff = [];
-
-    list.forEach(e => {
-      const runId = getText(e, idQuery);
-
-      if (!runId) return;
-
-      if (runId === 'OFF') {
-        const day = getText(e, workdayQuery);
-        if (day) daysOff.push(day);
-        return;
+      if (bidId) {
+        State.settings = q;
+        await DOM.scrape(bidId.innerText);
       }
 
-      const startTime = getMinutes(e, startTimeQuery);
+      const title = document.querySelector(menuTitleQ).innerHTML;
 
-      if (!startTime) return;
-
-      const endTime = getMinutes(e, endTimeQuery);
-      const workTime = parseWorkTime(getText(e, workQuery));
-      const splitTime = endTime - startTime - workTime;
-
-      if (!moon) {
-        Utils.renderFieldCells(e, splitTime);
+      if ((title === queries[i].menuTitle || bidId) && !favorites) {
+        DOM.renderFavorites();
       }
-
-      totalSplit += splitTime;
-      totalWork += workTime;
-    });
-
-    totalSplit = parseTotal(totalSplit);
-    totalWork = parseTotal(totalWork);
-
-    State.data = {
-      bidId,
-      totalWork,
-      totalSplit,
-      daysOff
-    };
-
-    if (!moon) {
-      Utils.renderHeaderCells(header, totalWork, totalSplit);
     }
   }
 
-  static addEventListeners() {
-    document.getElementById('save-run').onclick = Utils.saveBtnClk;
-    document.getElementById('toggle-menu').onclick = Utils.toggleMenu;
-    document.getElementById('menu-close').onclick = Utils.toggleMenu;
-    document.getElementById('menu-clear').onclick = Utils.clearBids;
-  }
-}
-
-function getText(elem, query) {
-  const e = elem.querySelector(query);
-
-  if (!e) {
-    console.log(`query error: ${query}`);
-    return null;
+  static parseClxsStr(str) {
+    return `.${str.split(' ').join('.')}`;
   }
 
-  return e.innerText;
-}
+  static getText(elem, query) {
+    const e = elem.querySelector(query);
 
-function formatTime(str) {
-  const [time, ampm] = str.split(' ');
-  const [hr, min] = time.split(':');
-  const h = parseInt(hr);
+    if (!e) {
+      console.log(`query error`, {query, e});
+      return null;
+    }
 
-  const hh =
-    h === 12
-      ? ampm === 'AMx'
-        ? 24
+    return e.innerText;
+  }
+
+  static formatTime(str) {
+    const [time, ampm] = str.split(' ');
+    const [hr, min] = time.split(':');
+    const h = parseInt(hr);
+
+    const hh =
+      h === 12
+        ? ampm === 'AMx'
+          ? 24
+          : ampm === 'AM'
+          ? 0
+          : h
         : ampm === 'AM'
-        ? 0
-        : h
-      : ampm === 'AM'
-      ? h
-      : ampm === 'PM'
-      ? h + 12
-      : h + 24;
+        ? h
+        : ampm === 'PM'
+        ? h + 12
+        : h + 24;
 
-  return hh * 60 + parseInt(min);
-}
+    return hh * 60 + parseInt(min);
+  }
 
-function getMinutes(elem, query) {
-  const str = getText(elem, query);
-  if (!str) return null;
+  static getMinutes(elem, query) {
+    const str = Utils.getText(elem, query);
+    if (!str) return null;
 
-  return formatTime(str);
-}
+    return Utils.formatTime(str);
+  }
 
-function parseWorkTime(str) {
-  const [h, m] = str.split('h');
+  static parseWorkTime(str) {
+    const [h, m] = str.split('h');
 
-  return parseInt(h) * 60 + parseInt(m);
-}
+    return parseInt(h) * 60 + parseInt(m);
+  }
 
-function parseTotal(mins) {
-  const hh = Math.floor(mins / 60);
-  const mm = mins % 60;
+  static parseTotal(mins) {
+    const hh = Math.floor(mins / 60);
+    const mm = mins % 60;
 
-  return `${hh}h${mm}`;
-}
-
-function renderFavorites() {
-  document.body.insertAdjacentHTML('beforeend', Components.Favorites());
-
-  const app = new Vue({
-    el: '#ssa-app',
-    data: {
-      data: null,
-      showMenu: false,
-      list: []
-    },
-    methods: {
-      toggleMenu() {
-        this.showMenu = !this.showMenu;
-      }
-    }
-  });
+    return `${hh}h${mm}`;
+  }
 }

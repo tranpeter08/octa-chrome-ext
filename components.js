@@ -19,70 +19,45 @@ class Components {
     </div>`;
   }
 
-  static BidItem(bid, i) {
-    return `<li class="bid-item" >
-    <div class="bid-item-index">${i + 1}) </div>
-    <div class="bid-item-detail-container">
-      ${Components.BidItemDetail('Bid ID', bid.bidId, 'bid-item-grid-1')}
-      ${Components.BidItemDetail('Work', bid.totalWork, 'bid-item-grid-2')}
-      ${Components.BidItemDetail('Splits', bid.totalSplit, 'bid-item-grid-3')}
-      ${Components.BidItemDetail(
-        'Days Off',
-        bid.daysOff.join(', '),
-        'bid-item-grid-4'
-      )}
-    </div>
-  </li>`;
-  }
+  static HeaderCells(totalWork, totalSplit) {
+    const {cell, label, value} = State.settings.headerClasses;
 
-  static BidItemDetail(label, value, grid) {
-    return `<span class="bid-item-label ${grid}">
-      ${label}:${' '}
-      <span class="bid-item-value">${value}</span>
-    </span>`;
-  }
-
-  static NoBids() {
-    return `<div class="no-bids"> - No bids saved - </div>`;
-  }
-
-  static HeaderCells(
-    totalWork,
-    totalSplit,
-    headerClass,
-    labelClasses,
-    valueClasses
-  ) {
     return `<div id="moonshine"></div>
-      <div class="${headerClasses} ssa-field-cell">
-        <div class="${headerLabelClasses}">Total Work Time: </div>
-        <div class="${headerValueClasses}">${totalWork}</div>
+      <div class="${cell} ssa-field-cell">
+        <div class="${label}">Total Work Time: </div>
+        <div class="${value}">${totalWork}</div>
       </div>
-      <div class="${headerClasses} ssa-field-cell">
-        <div class="${headerLabelClasses}">Total Split Time: </div>
-        <div class="${headerValueClasses}">${totalSplit}</div>
+      <div class="${cell} ssa-field-cell">
+        <div class="${label}">Total Split Time: </div>
+        <div class="${value}">${totalSplit}</div>
       </div>
     `;
   }
 
-  static FieldCells(splitTime, cellClasses, labelClasses, valueClasses) {
-    return `<span class="${fieldCellClasses} ssa-field-cell">
-      <span class="${fieldCellLabelClasses}">Splits: </span>  
-      <span class="${fieldCellValueClasses}">${parseTotal(splitTime)}</span>
+  static FieldCells(splitTime) {
+    const {cell, label, value} = State.settings.fieldClasses;
+
+    return `<span class="${cell} ssa-field-cell">
+      <span class="${label}">Splits: </span>  
+      <span class="${value}">${Utils.parseTotal(splitTime)}</span>
     </span>`;
   }
 
   static Favorites() {
     return `<div id="ssa-app">
-          <fav-open 
-            :show_menu="showMenu" 
-            :onclick="toggleMenu">
-          </fav-open>
+        <fav-open 
+          :show_menu="showMenu" 
+          :onclick="toggleMenu">
+        </fav-open>
 
-          <fav-menu 
-            :onclose="toggleMenu"
-            :show_menu="showMenu">
-          </fav-menu>
-        </div>`;
+        <fav-menu
+          :onclear="clearBids" 
+          :onsave="saveBid"
+          :onclose="toggleMenu"
+          :show_menu="showMenu"
+          :bids="bids"
+        >
+        </fav-menu>
+      </div>`;
   }
 }
