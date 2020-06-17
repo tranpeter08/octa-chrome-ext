@@ -25,7 +25,7 @@ class DOM {
       parseTotal,
       getMinutes,
       getText,
-      parseWorkTime,
+      parseWorkTime
     } = Utils;
 
     const moon = document.querySelector('#moonshine');
@@ -47,7 +47,7 @@ class DOM {
     let totalTime = 0;
     let daysOff = [];
 
-    list.forEach((e) => {
+    list.forEach(e => {
       const runId = getText(e, parseClxsStr(fieldClasses.runId));
 
       if (!runId) return;
@@ -88,7 +88,7 @@ class DOM {
       totalWork,
       totalSplit,
       totalTime,
-      daysOff,
+      daysOff
     };
 
     if (!moon) {
@@ -99,12 +99,13 @@ class DOM {
   static renderFavorites() {
     document.body.insertAdjacentHTML('beforeend', Components.Favorites());
 
-    const favorites = new Vue({
+    State.menu = new Vue({
       el: '#ssa-app',
       data: {
         data: null,
         showMenu: false,
         bids: [],
+        title: State.settings.menuTitle
       },
       async created() {
         this.bids = await Bids.getBids(State.settings.menuTitle);
@@ -116,26 +117,18 @@ class DOM {
         },
 
         async saveBid() {
-          if (!State.settings.bidIdQ) {
-            // alert('Please select an assignment');
-            // return
-            await Utils.configureApp();
-            console.log(State);
-          }
-
-          console.log(State);
-
-          const bidId = document.querySelector(State.settings.bidIdQ);
+          const bidId = document.querySelector(
+            Utils.parseClxsStr(State.settings.bidIdClasses)
+          );
 
           if (!bidId) {
             alert('Please select an assignment');
             return;
           }
 
-          // await DOM.scrape(bidId.innerHTML);
-          const success = await Bids.addBid(State.data);
+          await DOM.scrape(bidId.innerHTML);
 
-          if (success) {
+          if (await Bids.addBid(State.data)) {
             this.bids = [...this.bids, State.data];
           }
         },
@@ -147,8 +140,8 @@ class DOM {
 
         async fetchBids() {
           this.bids = Bids.getBids();
-        },
-      },
+        }
+      }
     });
   }
 }

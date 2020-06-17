@@ -4,6 +4,7 @@
 
 .menu-title {
   text-align: center;
+  margin: 10px 0px 10px;
 }
 
 .ssa-field-cell {
@@ -25,6 +26,7 @@
 #SSA-menu {
   background-color: white;
   box-shadow: 0px 0px 12px 0.5px black;
+  max-width: 300px;
 }
 
 #SSA-menu,
@@ -34,10 +36,12 @@
   left: 20px;
 }
 
+.menu-close-container {
+  display: grid;
+  justify-content: right;
+}
+
 #menu-close {
-  position: absolute;
-  right: 0;
-  top: 0;
   border-radius: 0;
 }
 

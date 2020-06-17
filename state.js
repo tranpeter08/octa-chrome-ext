@@ -1,15 +1,14 @@
 const State = {
   data: null,
-  list: [],
-  menu: false,
+  menu: null,
   settings: {
     menuTitle: '',
-    bidIdQ: '',
+    bidIdClasses: '',
     headerClasses: {
       parent: '',
       cell: '',
       label: '',
-      value: '',
+      value: ''
     },
     fieldClasses: {
       parent: '',
@@ -21,7 +20,7 @@ const State = {
       end: '',
       work: '',
       label: '',
-      value: '',
-    },
-  },
+      value: ''
+    }
+  }
 };

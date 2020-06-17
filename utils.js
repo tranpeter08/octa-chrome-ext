@@ -1,40 +1,26 @@
 class Utils {
-  static async saveBtnClk() {
-    // const title = document.querySelector(this.parseClxsStr(State.settings.fieldClasses.parent));
-    const bidId = getText(document, State.settings.bidIdQ);
-
-    if (!bidId) {
-      alert('Please select an assignment.');
-      return;
-    }
-
-    // const bidId = getText(document, State.settings.bidIdQ);
-    await DOM.scrape(bidId);
-
-    if (await Bids.findBid(bidId)) {
-      alert('Bid already saved to favorites');
-    } else {
-      await Bids.addBid(State.data);
-    }
-  }
-
   static async configureApp() {
     const {queries} = Config;
 
     for (let i = 0; i < queries.length; i++) {
       const q = queries[i];
-      const bidId = document.querySelector(q.bidIdQ);
+      const bidId = document.querySelector(Utils.parseClxsStr(q.bidIdClasses));
+      const title = document.querySelector(menuTitleQ);
       const favorites = document.getElementById('ssa-app');
 
+      if (!bidId && !title) {
+        continue;
+      }
+
+      State.settings = q;
+
       if (bidId) {
-        State.settings = q;
         await DOM.scrape(bidId.innerText);
       }
 
-      const title = document.querySelector(menuTitleQ).innerHTML;
-
-      if ((title === queries[i].menuTitle || bidId) && !favorites) {
+      if ((title.innerHTML === queries[i].menuTitle || bidId) && !favorites) {
         DOM.renderFavorites();
+        break;
       }
     }
   }
@@ -47,7 +33,6 @@ class Utils {
     const e = elem.querySelector(query);
 
     if (!e) {
-      console.log(`query error`, {query, e});
       return null;
     }
 

@@ -8,7 +8,7 @@ Vue.component('fav-open', {
       >
         Favorites
       </button>
-    `,
+    `
 });
 
 Vue.component('fav-bids-list', {
@@ -31,11 +31,16 @@ Vue.component('fav-bids-list', {
       >
       </fav-bids-list-item>
     </li>
-  </ol>`,
+  </ol>`
 });
 
 Vue.component('fav-bids-list-item', {
   props: ['bid', 'i'],
+  methods: {
+    async removeBid() {
+      State.menu.bids = await Bids.deleteById(this.bid.bidId);
+    }
+  },
   template: `<li class="bid-item" >
     <div class="bid-item-index">{{i + 1}})</div>
     <div class="bid-item-detail-container">
@@ -63,8 +68,10 @@ Vue.component('fav-bids-list-item', {
         :grid="'bid-item-grid-4'"
       >
       </fav-bids-list-item-detail>
+
+      <div><button v-on:click="removeBid">Remove</button></div>
     </div>
-  </li>`,
+  </li>`
 });
 
 Vue.component('fav-bids-list-item-detail', {
@@ -72,42 +79,42 @@ Vue.component('fav-bids-list-item-detail', {
   template: `<span :class="['bid-item-label', grid]">
     {{label}}:{{' '}}
     <span class="bid-item-value">{{value}}</span>
-  </span>`,
+  </span>`
 });
 
 Vue.component('fav-menu', {
-  props: ['onclose', 'show_menu', 'bids', 'onsave', 'onclear'],
+  props: ['onclose', 'show_menu', 'bids', 'onsave', 'onclear', 'title'],
   template: `<div id="SSA-menu" :class="{hidden: !show_menu}">
-      <div>
-        <button
-          id="menu-close"
-          class="ssa-button" 
-          v-on:click="onclose"
-        >
-          CLOSE
-        </button>
-      </div>
+    <div class="menu-close-container">
+      <button
+        id="menu-close"
+        class="ssa-button" 
+        v-on:click="onclose"
+      >
+        CLOSE
+      </button>
+    </div>
 
-      <h2 class="menu-title">Favorite Bids</h2>
+    <h2 class="menu-title">{{title}} Favorites</h2>
 
-      <fav-bids-list :bids="bids">
-      </fav-bids-list>
+    <fav-bids-list :bids="bids">
+    </fav-bids-list>
 
-      <div id="menu-button-container">
-        <button 
-          v-on:click="onclear"
-          class="ssa-button" 
-          id="menu-clear"
-        >
-          CLEAR
-        </button>
-        <button
-          v-on:click="onsave" 
-          class="ssa-button" 
-          id="save-run"
-        >
-          ADD
-        </button>
-      </div>
-    </div>`,
+    <div id="menu-button-container">
+      <button 
+        v-on:click="onclear"
+        class="ssa-button" 
+        id="menu-clear"
+      >
+        CLEAR
+      </button>
+      <button
+        v-on:click="onsave" 
+        class="ssa-button" 
+        id="save-run"
+      >
+        ADD
+      </button>
+    </div>
+  </div>`
 });

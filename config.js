@@ -3,7 +3,7 @@ const menuTitleQ = '.MainMenuCurrentItem.MainMenuClose';
 
 // bid ID
 const workBidIdQ =
-  '.WorkBidWorkDetailHeader_Cell_Value.Position_OCTANumber_Cell_Value.Cell_Value';
+  'WorkBidWorkDetailHeader_Cell_Value Position_OCTANumber_Cell_Value Cell_Value';
 
 // header
 const workBidHeaderClx = 'WorkBidWorkDetailHeader_View';
@@ -37,12 +37,12 @@ class Config {
   static queries = [
     {
       menuTitle: 'Work Bid',
-      bidIdQ: workBidIdQ,
+      bidIdClasses: workBidIdQ,
       headerClasses: {
         parent: workBidHeaderClx,
         cell: workBidHeaderCellClxs,
         label: workBidHeaderLabelClxs,
-        value: workBidHeaderValueClxs,
+        value: workBidHeaderValueClxs
       },
       fieldClasses: {
         parent: workBidFieldParentClxs,
@@ -54,21 +54,21 @@ class Config {
         end: workBidFieldEndClxs,
         work: workBidFieldWorkTimeClxs,
         label: workBidHeaderLabelClxs,
-        value: workBidFieldValueClxs,
-      },
+        value: workBidFieldValueClxs
+      }
     },
     {
       menuTitle: 'Open Assignment Bid',
-      bidIdQ:
-        '.OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Label.OpenAssignment_OCTANumber_Cell_Label.Cell_Label',
+      bidIdClasses:
+        'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value OpenAssignment_OCTANumber_Cell_Value Cell_Value',
       headerClasses: {
         parent: 'OpenAssignmentBidOpenAssignmentDetailHeader_View',
         cell:
-          'OpenAssignmentBidOpenAssignmentDetailHeader_Cell UnavailableWeeks_Cell Field_Cell',
+          'OpenAssignmentBidOpenAssignmentDetailHeader_Cell OpenAssignment_OCTANumber_Cell Field_Cell',
         label:
           'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Label UnavailableWeeks_Cell_Label Cell_Label',
         value:
-          'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value UnavailableWeeks_Cell_Value Cell_Value',
+          'OpenAssignmentBidOpenAssignmentDetailHeader_Cell_Value UnavailableWeeks_Cell_Value Cell_Value'
       },
       fieldClasses: {
         parent: 'OpenAssignmentDetailWorkday',
@@ -83,8 +83,8 @@ class Config {
         label:
           'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Label Cell_Label',
         value:
-          'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value Cell_Value',
-      },
-    },
+          'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value Cell_Value'
+      }
+    }
   ];
 }

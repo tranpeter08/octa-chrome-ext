@@ -1,24 +1,4 @@
 class Components {
-  static Menu() {
-    return `<div id="SSA-container">
-      <button class="ssa-button" id="toggle-menu">Favorites</button>
-
-      <div id="SSA-menu" class="hidden">
-        <div>
-          <button class="ssa-button" id="menu-close">CLOSE</button>
-        </div>
-
-        <h2 class="menu-title">Favorite Bids</h2>
-        <ol id="bids-container"></ol>
-
-        <div id="menu-button-container">
-          <button class="ssa-button" id="menu-clear">CLEAR</button>
-          <button class="ssa-button" id="save-run">ADD</button>
-        </div>
-      </div>
-    </div>`;
-  }
-
   static HeaderCells(totalWork, totalSplit) {
     const {cell, label, value} = State.settings.headerClasses;
 
@@ -51,6 +31,7 @@ class Components {
         </fav-open>
 
         <fav-menu
+          :title="title"
           :onclear="clearBids" 
           :onsave="saveBid"
           :onclose="toggleMenu"
