@@ -21,7 +21,7 @@ Vue.component('fav-bids-list', {
     </div>
    
     <li 
-      v-if="bids" 
+      v-else 
       v-for="(bid, i) in bids"
       :key="bid.bidId"
     >
