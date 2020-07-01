@@ -8,7 +8,8 @@ class Utils {
       const title = document.querySelector(menuTitleQ);
       const favorites = document.getElementById('ssa-app');
 
-      if (!bidId && !title) {
+      // !bidId &&
+      if (!title || title.innerHTML !== q.menuTitle) {
         continue;
       }
 
@@ -18,10 +19,11 @@ class Utils {
         await DOM.scrape(bidId.innerText);
       }
 
-      if ((title.innerHTML === queries[i].menuTitle || bidId) && !favorites) {
+      if (!favorites) {
         DOM.renderFavorites();
-        break;
       }
+
+      break;
     }
   }
 

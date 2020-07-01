@@ -121,10 +121,6 @@ class DOM {
             Utils.parseClxsStr(State.settings.bidIdClasses)
           );
 
-          console.log({class: State.settings.bidIdClasses});
-
-          console.log({bidId});
-
           if (!bidId) {
             alert('Please select an assignment');
             return;
