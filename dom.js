@@ -25,7 +25,7 @@ class DOM {
       parseTotal,
       getMinutes,
       getText,
-      parseWorkTime
+      parseWorkTime,
     } = Utils;
 
     const moon = document.querySelector('#moonshine');
@@ -47,7 +47,7 @@ class DOM {
     let totalTime = 0;
     let daysOff = [];
 
-    list.forEach(e => {
+    list.forEach((e) => {
       const runId = getText(e, parseClxsStr(fieldClasses.runId));
 
       if (!runId) return;
@@ -88,7 +88,7 @@ class DOM {
       totalWork,
       totalSplit,
       totalTime,
-      daysOff
+      daysOff,
     };
 
     if (!moon) {
@@ -105,7 +105,7 @@ class DOM {
         data: null,
         showMenu: false,
         bids: [],
-        title: State.settings.menuTitle
+        title: State.settings.menuTitle,
       },
       async created() {
         this.bids = await Bids.getBids(State.settings.menuTitle);
@@ -120,6 +120,10 @@ class DOM {
           const bidId = document.querySelector(
             Utils.parseClxsStr(State.settings.bidIdClasses)
           );
+
+          console.log({class: State.settings.bidIdClasses});
+
+          console.log({bidId});
 
           if (!bidId) {
             alert('Please select an assignment');
@@ -140,8 +144,8 @@ class DOM {
 
         async fetchBids() {
           this.bids = Bids.getBids();
-        }
-      }
+        },
+      },
     });
   }
 }
