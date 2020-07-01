@@ -7,7 +7,9 @@ const codes = [16, 17, 72];
 document.addEventListener('keydown', (e) => {
   const {keyCode: kc} = e;
 
-  if (codes.includes(kc) && !keys[kc]) {
+  if (!codes.includes(kc)) return;
+
+  if (!keys[kc]) {
     keys[kc] = true;
   }
 
