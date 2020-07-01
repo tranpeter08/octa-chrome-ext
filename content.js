@@ -2,10 +2,10 @@
 console.log('Self-Service Assistant enabled');
 
 let keys = {};
+const codes = [16, 17, 72];
 
 document.addEventListener('keydown', (e) => {
   const {keyCode: kc} = e;
-  const codes = [16, 17, 72];
 
   if (codes.includes(kc) && !keys[kc]) {
     keys[kc] = true;
@@ -19,7 +19,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('keyup', () => {
-  keys = {};
+  const list = Object.keys(keys);
+
+  if (list.length) {
+    keys = {};
+  }
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
