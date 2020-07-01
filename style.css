@@ -25,7 +25,6 @@
 
 #SSA-menu {
   background-color: white;
-  box-shadow: 0px 0px 12px 0.5px black;
   max-width: 300px;
 }
 
@@ -34,6 +33,12 @@
   position: fixed;
   bottom: 20px;
   left: 20px;
+  box-shadow: 0px 0px 12px 0.5px black;
+}
+
+.ssa-button:hover {
+  background-color: #4b87d1;
+  transition: 0.3s;
 }
 
 .menu-close-container {
@@ -107,6 +112,7 @@
 
 #menu-button-container {
   padding: 10px;
+  text-align: right;
 }
 
 .no-bids {

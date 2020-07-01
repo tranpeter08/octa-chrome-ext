@@ -14,10 +14,6 @@ class DOM {
     );
   }
 
-  static renderMenu() {
-    document.body.insertAdjacentHTML('beforeend', Components.Menu());
-  }
-
   static async scrape(bidId) {
     const {headerClasses, fieldClasses} = State.settings;
     const {
@@ -108,7 +104,7 @@ class DOM {
         title: State.settings.menuTitle,
       },
       async created() {
-        this.bids = await Bids.getBids(State.settings.menuTitle);
+        this.bids = await Bids.getBids();
       },
 
       methods: {
@@ -127,15 +123,24 @@ class DOM {
           }
 
           await DOM.scrape(bidId.innerHTML);
+          const added = await Bids.addBid(State.data);
 
-          if (await Bids.addBid(State.data)) {
-            this.bids = [...this.bids, State.data];
+          if (added) {
+            this.bids = await Bids.getBids();
+            this.$nextTick(function () {
+              const ctnr = this.$el.querySelector('#bids-container');
+              ctnr.scrollTo({
+                top: ctnr.scrollHeight,
+                behavior: 'smooth',
+              });
+            });
           }
+          // [...this.bids, State.data];
         },
 
         async clearBids() {
-          await Bids.deleteAll();
-          this.bids = [];
+          await Bids.deleteAll(this.bids);
+          this.bids = {...this.bids, [this.title]: []};
         },
 
         async fetchBids() {

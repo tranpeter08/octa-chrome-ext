@@ -8,7 +8,7 @@ Vue.component('fav-open', {
       >
         Favorites
       </button>
-    `
+    `,
 });
 
 Vue.component('fav-bids-list', {
@@ -31,7 +31,7 @@ Vue.component('fav-bids-list', {
       >
       </fav-bids-list-item>
     </li>
-  </ol>`
+  </ol>`,
 });
 
 Vue.component('fav-bids-list-item', {
@@ -39,7 +39,7 @@ Vue.component('fav-bids-list-item', {
   methods: {
     async removeBid() {
       State.menu.bids = await Bids.deleteById(this.bid.bidId);
-    }
+    },
   },
   template: `<li class="bid-item" >
     <div class="bid-item-index">{{i + 1}})</div>
@@ -71,7 +71,7 @@ Vue.component('fav-bids-list-item', {
 
       <div><button v-on:click="removeBid">Remove</button></div>
     </div>
-  </li>`
+  </li>`,
 });
 
 Vue.component('fav-bids-list-item-detail', {
@@ -79,7 +79,7 @@ Vue.component('fav-bids-list-item-detail', {
   template: `<span :class="['bid-item-label', grid]">
     {{label}}:{{' '}}
     <span class="bid-item-value">{{value}}</span>
-  </span>`
+  </span>`,
 });
 
 Vue.component('fav-menu', {
@@ -97,7 +97,7 @@ Vue.component('fav-menu', {
 
     <h2 class="menu-title">{{title}} Favorites</h2>
 
-    <fav-bids-list :bids="bids">
+    <fav-bids-list :bids="bids[State.settings.menuTitle]">
     </fav-bids-list>
 
     <div id="menu-button-container">
@@ -116,5 +116,5 @@ Vue.component('fav-menu', {
         ADD
       </button>
     </div>
-  </div>`
+  </div>`,
 });

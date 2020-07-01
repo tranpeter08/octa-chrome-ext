@@ -1,6 +1,10 @@
 'use strict';
 console.log('Self-Service Assistant enabled');
 
+window.onload = function () {
+  console.log('loaded');
+};
+
 let keys = {};
 const codes = [16, 17, 72];
 
@@ -17,7 +21,7 @@ document.addEventListener('keydown', (e) => {
     if (!keys[code]) return;
   }
 
-  console.log('BOOM');
+  Utils.configureApp();
 });
 
 document.addEventListener('keyup', () => {
