@@ -2,6 +2,7 @@
   "manifest_version": 2,
   "name": "Self-Service OCTA Assistant",
   "version": "0.1",
+  "description": "Chrome extension assistant for OCTA Self-Service. Instantly view splits and work hours of bids",
   "content_scripts": [
     {
       "matches": [
@@ -17,6 +18,7 @@
         "bids.js",
         "state.js",
         "components.js",
+        "observer.js",
         "content.js"
       ],
       "css": ["style.css"]

@@ -1,8 +1,9 @@
 'use strict';
-console.log('Self-Service Assistant enabled');
-
 window.onload = function () {
-  console.log('loaded');
+  console.log('Self-Service Assistant enabled');
+
+  Utils.configureApp();
+  MutnObsvr.init();
 };
 
 let keys = {};
