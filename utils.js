@@ -81,4 +81,38 @@ class Utils {
 
     return `${hh}h${mm}`;
   }
+
+  static addHKeyListeners(keys, codes) {
+    document.addEventListener('keydown', (e) => {
+      const {keyCode: kc} = e;
+
+      if (!codes.includes(kc)) return;
+
+      if (!keys[kc]) {
+        keys[kc] = true;
+      }
+
+      for (const code of codes) {
+        if (!keys[code]) return;
+      }
+
+      this.configureApp();
+    });
+
+    document.addEventListener('keyup', () => {
+      const list = Object.keys(keys);
+
+      if (list.length) {
+        keys = {};
+      }
+    });
+  }
+
+  static addChromeMsgListener() {
+    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+      if (request.message === 'clicked_browser_action') {
+        this.configureApp();
+      }
+    });
+  }
 }
