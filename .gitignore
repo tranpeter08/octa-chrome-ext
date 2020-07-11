@@ -1,2 +1,4 @@
 local
 .todo
+.DS_Store
+*.zip
