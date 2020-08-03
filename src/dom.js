@@ -106,7 +106,7 @@ const DOM = {
       data: {
         data: null,
         showMenu: false,
-        bids: [],
+        bids: {},
         title: State.settings.menuTitle,
       },
       async created() {

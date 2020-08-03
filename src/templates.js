@@ -15,6 +15,43 @@ Vue.component('fav-open', {
     `,
 });
 
+Vue.component('fav-menu', {
+  props: ['onclose', 'show_menu', 'bids', 'onsave', 'onclear', 'title'],
+  template: `<div id="SSA-menu" :class="{hidden: !show_menu}">
+    <div class="menu-close-container">
+      <button
+        id="menu-close"
+        class="ssa-button" 
+        v-on:click="onclose"
+      >
+        CLOSE
+      </button>
+    </div>
+
+    <h2 class="menu-title">{{title}} Favorites</h2>
+
+    <fav-bids-list :bids="bids[title]">
+    </fav-bids-list>
+
+    <div id="menu-button-container">
+      <button 
+        v-on:click="onclear"
+        class="ssa-button" 
+        id="menu-clear"
+      >
+        CLEAR
+      </button>
+      <button
+        v-on:click="onsave" 
+        class="ssa-button" 
+        id="save-run"
+      >
+        ADD
+      </button>
+    </div>
+  </div>`,
+});
+
 Vue.component('fav-bids-list', {
   props: ['bids'],
   template: `<ol id="bids-container">
@@ -84,41 +121,4 @@ Vue.component('fav-bids-list-item-detail', {
     {{label}}:{{' '}}
     <span class="bid-item-value">{{value}}</span>
   </span>`,
-});
-
-Vue.component('fav-menu', {
-  props: ['onclose', 'show_menu', 'bids', 'onsave', 'onclear', 'title'],
-  template: `<div id="SSA-menu" :class="{hidden: !show_menu}">
-    <div class="menu-close-container">
-      <button
-        id="menu-close"
-        class="ssa-button" 
-        v-on:click="onclose"
-      >
-        CLOSE
-      </button>
-    </div>
-
-    <h2 class="menu-title">{{title}} Favorites</h2>
-
-    <fav-bids-list :bids="bids[State.settings.menuTitle]">
-    </fav-bids-list>
-
-    <div id="menu-button-container">
-      <button 
-        v-on:click="onclear"
-        class="ssa-button" 
-        id="menu-clear"
-      >
-        CLEAR
-      </button>
-      <button
-        v-on:click="onsave" 
-        class="ssa-button" 
-        id="save-run"
-      >
-        ADD
-      </button>
-    </div>
-  </div>`,
 });

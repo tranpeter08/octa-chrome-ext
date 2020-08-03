@@ -1,56 +1,39 @@
 'use strict';
 import State from './state';
 
-const {
-  employeeId,
-  settings: {menuTitle: collection},
-} = State;
-
 export default {
   async findBid(id) {
-    // const {
-    //   settings: {menuTitle: collection},
-    // } = State;
     const bids = await this.getBids();
-    // const collection = State.settings.menuTitle;
     return bids[collection].find((b) => b && b.bidId === id);
   },
 
-  getBids() {
-    /* 
-      bids[employeeId][collection]
-    */
+  async getBids() {
+    const {
+      employeeId,
+      settings: {menuTitle: collection},
+    } = State;
+    const bids = await this.getAllBids();
 
+    return bids[employeeId];
+  },
+
+  getAllBids() {
+    const {
+      employeeId,
+      settings: {menuTitle: collection},
+    } = State;
     return new Promise((resolve, rej) => {
-      // const {
-      //   employeeId,
-      //   settings: {menuTitle: collection},
-      // } = State;
-
       chrome.storage.sync.get('bids', function ({bids}) {
-        // no employeeid, set employeeid and set collection
         if (!bids[employeeId]) {
           bids[employeeId] = {};
         }
 
         if (!bids[employeeId][collection]) {
           bids[employeeId][collection] = [];
-
-          // : {...bids, [collection]: []}
           chrome.storage.sync.set({bids}, function () {
-            // {...bids, [collection]: []}
             resolve(bids);
           });
         }
-
-        // if (!bids[collection]) {
-        //   chrome.storage.sync.set(
-        //     {bids: {...bids, [collection]: []}},
-        //     function () {
-        //       resolve({...bids, [collection]: []});
-        //     }
-        //   );
-        // }
 
         resolve(bids);
       });
@@ -58,18 +41,16 @@ export default {
   },
 
   async addBid(bid) {
+    const {
+      employeeId,
+      settings: {menuTitle: collection},
+    } = State;
     if (!bid) {
       alert('Please select an assignment');
       return;
     }
 
-    // const collection = State.settings.menuTitle;
-    // const {
-    //   employeeId,
-    //   settings: {menuTitle: collection},
-    // } = State;
-
-    const allBids = await this.getBids();
+    const allBids = await this.getAllBids();
     const bids = allBids[employeeId][collection];
 
     const match = bids.find((b) => b.bidId === bid.bidId);
@@ -81,7 +62,6 @@ export default {
 
     return new Promise((resolve, rej) => {
       bids.push(bid);
-      // bids: {...allBids, [collection]: [...bids, bid]}
       chrome.storage.sync.set({bids: allBids}, function () {
         resolve(1);
       });
@@ -89,26 +69,34 @@ export default {
   },
 
   async deleteAll() {
-    const bids = await this.getBids();
-    bids[employeeId][collection] = [];
-    chrome.storage.sync.set({bids});
+    const {
+      employeeId,
+      settings: {menuTitle: collection},
+    } = State;
+    const allBids = await this.getAllBids();
+    allBids[employeeId][collection] = [];
+
+    chrome.storage.sync.set({bids: allBids});
   },
 
   async deleteById(bidId) {
-    const bids = await this.getBids();
-    const others = bids[employeeId][collection].filter(
-      (b) => b.bidId !== bidId
-    );
+    const {
+      employeeId,
+      settings: {menuTitle: collection},
+    } = State;
+    const allBids = await this.getAllBids();
+    const currentBids = allBids[employeeId][collection];
+    const others = currentBids.filter((b) => b.bidId !== bidId);
 
-    if (others.length === bids.length) {
+    if (others.length === currentBids.length) {
       console.log('bid not found, none deleted');
       return null;
     }
 
     return new Promise((resolve, rej) => {
-      bids[employeeId][collection] = others;
-      chrome.storage.sync.set({bids}, function () {
-        resolve(bids);
+      allBids[employeeId][collection] = others;
+      chrome.storage.sync.set({bids: allBids}, function () {
+        resolve(allBids[employeeId]);
       });
     });
   },
