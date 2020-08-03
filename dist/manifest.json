@@ -5,7 +5,10 @@
   "description": "Chrome extension assistant for OCTA Self-Service. Instantly view splits and work hours of bids",
   "content_scripts": [
     {
-      "matches": ["https://coachopselfserv.octa.net/SelfService/Bid/*"],
+      "matches": [
+        "https://coachopselfserv.octa.net/SelfService/Bid/*",
+        "http://127.0.0.1:5500/*"
+      ],
       "js": ["bundle.js"],
       "css": ["style.css"]
     }
@@ -16,5 +19,5 @@
   "background": {
     "scripts": ["background.js"]
   },
-  "permissions": ["storage", "declarativeContent", "activeTab"]
+  "permissions": ["storage", "activeTab"]
 }
