@@ -1,4 +1,4 @@
-// chrome.storage.sync.set('bids', {});
+// chrome.storage.sync.set({bids: {}});
 
 chrome.storage.sync.get('bids', function (res) {
   console.log(res);
