@@ -84,7 +84,11 @@ const Utils = {
     const hh = Math.floor(mins / 60);
     const mm = mins % 60;
 
-    return `${hh}h${mm}`;
+    function formatTime(time) {
+      return time < 10 ? '0' + time.toString() : time;
+    }
+
+    return `${formatTime(hh)}h${formatTime(mm)}`;
   },
 
   addHKeyListeners(keys, codes) {
