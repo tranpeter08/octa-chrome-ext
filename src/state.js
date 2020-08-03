@@ -1,6 +1,7 @@
 const State = {
   data: null,
   menu: null,
+  employeeId: '',
   settings: {
     menuTitle: '',
     bidIdClasses: '',

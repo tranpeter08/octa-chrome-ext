@@ -1,25 +1,56 @@
-'use strcit';
+'use strict';
 import State from './state';
+
+const {
+  employeeId,
+  settings: {menuTitle: collection},
+} = State;
 
 export default {
   async findBid(id) {
+    // const {
+    //   settings: {menuTitle: collection},
+    // } = State;
     const bids = await this.getBids();
-    return bids[State.settings.menuTitle].find((b) => b && b.bidId === id);
+    // const collection = State.settings.menuTitle;
+    return bids[collection].find((b) => b && b.bidId === id);
   },
 
   getBids() {
+    /* 
+      bids[employeeId][collection]
+    */
+
     return new Promise((resolve, rej) => {
-      const collection = State.settings.menuTitle;
+      // const {
+      //   employeeId,
+      //   settings: {menuTitle: collection},
+      // } = State;
 
       chrome.storage.sync.get('bids', function ({bids}) {
-        if (!bids[collection]) {
-          chrome.storage.sync.set(
-            {bids: {...bids, [collection]: []}},
-            function () {
-              resolve({...bids, [collection]: []});
-            }
-          );
+        // no employeeid, set employeeid and set collection
+        if (!bids[employeeId]) {
+          bids[employeeId] = {};
         }
+
+        if (!bids[employeeId][collection]) {
+          bids[employeeId][collection] = [];
+
+          // : {...bids, [collection]: []}
+          chrome.storage.sync.set({bids}, function () {
+            // {...bids, [collection]: []}
+            resolve(bids);
+          });
+        }
+
+        // if (!bids[collection]) {
+        //   chrome.storage.sync.set(
+        //     {bids: {...bids, [collection]: []}},
+        //     function () {
+        //       resolve({...bids, [collection]: []});
+        //     }
+        //   );
+        // }
 
         resolve(bids);
       });
@@ -32,9 +63,14 @@ export default {
       return;
     }
 
-    const collection = State.settings.menuTitle;
+    // const collection = State.settings.menuTitle;
+    // const {
+    //   employeeId,
+    //   settings: {menuTitle: collection},
+    // } = State;
+
     const allBids = await this.getBids();
-    const bids = allBids[collection];
+    const bids = allBids[employeeId][collection];
 
     const match = bids.find((b) => b.bidId === bid.bidId);
 
@@ -44,23 +80,23 @@ export default {
     }
 
     return new Promise((resolve, rej) => {
-      chrome.storage.sync.set(
-        {bids: {...allBids, [collection]: [...bids, bid]}},
-        function () {
-          resolve(1);
-        }
-      );
+      bids.push(bid);
+      // bids: {...allBids, [collection]: [...bids, bid]}
+      chrome.storage.sync.set({bids: allBids}, function () {
+        resolve(1);
+      });
     });
   },
 
   async deleteAll() {
     const bids = await this.getBids();
-    chrome.storage.sync.set({bids: {...bids, [State.settings.menuTitle]: []}});
+    bids[employeeId][collection] = [];
+    chrome.storage.sync.set({bids});
   },
 
   async deleteById(bidId) {
     const bids = await this.getBids();
-    const others = bids[State.settings.menuTitle].filter(
+    const others = bids[employeeId][collection].filter(
       (b) => b.bidId !== bidId
     );
 
@@ -70,17 +106,10 @@ export default {
     }
 
     return new Promise((resolve, rej) => {
-      chrome.storage.sync.set(
-        {
-          bids: {
-            ...bids,
-            [State.settings.menuTitle]: others,
-          },
-        },
-        function () {
-          resolve({...bids, [State.settings.menuTitle]: others});
-        }
-      );
+      bids[employeeId][collection] = others;
+      chrome.storage.sync.set({bids}, function () {
+        resolve(bids);
+      });
     });
   },
 };

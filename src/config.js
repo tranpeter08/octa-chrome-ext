@@ -34,6 +34,7 @@ const workBidFieldValueClxs =
   'WorkBidWorkDetailRosterAssignment_Cell_Value EndTime_Cell_Value Cell_Value';
 
 export default {
+  employeeIdQ: '#EmployeeDisplayId',
   menuTitleQ,
   queries: [
     {

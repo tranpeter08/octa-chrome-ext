@@ -4,7 +4,8 @@ import DOM from './dom';
 
 const Utils = {
   async configureApp() {
-    const {queries, menuTitleQ} = Config;
+    const {queries, menuTitleQ, employeeIdQ} = Config;
+    State.employeeId = document.querySelector(employeeIdQ).innerHTML;
 
     for (let i = 0; i < queries.length; i++) {
       const q = queries[i];
