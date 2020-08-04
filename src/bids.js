@@ -8,10 +8,7 @@ export default {
   },
 
   async getBids() {
-    const {
-      employeeId,
-      settings: {menuTitle: collection},
-    } = State;
+    const {employeeId} = State;
     const bids = await this.getAllBids();
 
     return bids[employeeId];
@@ -22,6 +19,7 @@ export default {
       employeeId,
       settings: {menuTitle: collection},
     } = State;
+
     return new Promise((resolve, rej) => {
       chrome.storage.sync.get('bids', function ({bids}) {
         if (!bids[employeeId]) {
@@ -45,6 +43,7 @@ export default {
       employeeId,
       settings: {menuTitle: collection},
     } = State;
+
     if (!bid) {
       alert('Please select an assignment');
       return;
@@ -52,7 +51,6 @@ export default {
 
     const allBids = await this.getAllBids();
     const bids = allBids[employeeId][collection];
-
     const match = bids.find((b) => b.bidId === bid.bidId);
 
     if (match) {
@@ -73,6 +71,7 @@ export default {
       employeeId,
       settings: {menuTitle: collection},
     } = State;
+
     const allBids = await this.getAllBids();
     allBids[employeeId][collection] = [];
 
