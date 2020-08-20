@@ -88,5 +88,32 @@ export default {
           'OpenAssignmentBidOpenAssignmentDetailWorkday_Cell_Value Cell_Value',
       },
     },
+    {
+      menuTitle: 'Holiday Bid',
+      bidIdClasses: '_',
+      field: 'ThirdRow_Group Field_Group',
+      items: [
+        {
+          id: 'PreferredDayAssignments',
+          listParent: 'HolidayBidPreferredDayAssignment_View',
+          workTime:
+            'HolidayBidPreferredDayAssignment_Cell_Value Assignment_WorkingTime_Cell_Value Cell_Value',
+          start:
+            'HolidayBidPreferredDayAssignment_Cell_Value Assignment_StartTime_Cell_Value Cell_Value',
+          end:
+            'HolidayBidPreferredDayAssignment_Cell_Value Assignment_EndTimeDsp_Cell_Value Cell_Value',
+        },
+        {
+          id: 'AvailableDuties',
+          listParent: 'HolidayBidAvailableDuty_View',
+          workTime:
+            'HolidayBidAvailableDuty_Cell_Value Assignment_WorkingTime_Cell_Value Cell_Value',
+          start:
+            'HolidayBidAvailableDuty_Cell_Value Assignment_StartTime_Cell_Value Cell_Value',
+          end:
+            'HolidayBidAvailableDuty_Cell_Value Assignment_EndTimeDsp_Cell_Value Cell_Value',
+        },
+      ],
+    },
   ],
 };

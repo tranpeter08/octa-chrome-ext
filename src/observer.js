@@ -7,6 +7,20 @@ const MutnObsvr = {
 
     function callback(mutationsList, obsvr) {
       for (let mutation of mutationsList) {
+        // console.log(mutation);
+
+        // updated for holiday bid below
+        if (
+          mutation.target.id === 'HolidayDetail' ||
+          mutation.target.className === 'ListBody SortedList FilteredList' ||
+          mutation.target.className === 'ListBody SortedList' ||
+          mutation.target.className === 'ListBody'
+        ) {
+          Utils.configureApp();
+          break;
+        }
+        //  ******************************
+
         if (
           mutation.type !== 'childList' ||
           mutation.target.id !== 'OpenAssignmentBidHome'

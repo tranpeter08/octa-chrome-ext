@@ -13,12 +13,16 @@ const Utils = {
       const title = document.querySelector(menuTitleQ);
       const favorites = document.getElementById('ssa-app');
 
-      // !bidId &&
       if (!title || title.innerHTML !== q.menuTitle) {
         continue;
       }
 
       State.settings = q;
+
+      if (title.innerHTML === 'Holiday Bid') {
+        DOM.scrapeHoliday();
+        break;
+      }
 
       if (bidId) {
         await DOM.scrape(bidId.innerText);

@@ -154,6 +154,51 @@ const DOM = {
       },
     });
   },
+
+  scrapeHoliday() {
+    const {items, field} = State.settings;
+    const ssaClass = 'ssa-cell';
+
+    for (let {id, listParent, workTime, start, end} of items) {
+      const query = `#${id} .${listParent}`;
+      const runs = document.querySelectorAll(query);
+
+      runs.forEach((elem) => {
+        const splitCtnr = elem.querySelector(`.${ssaClass}`);
+        if (splitCtnr) {
+          return;
+        }
+
+        const workStr = elem.querySelector(Utils.parseClxsStr(workTime))
+          .innerHTML;
+        const totalWork = Utils.parseWorkTime(workStr);
+        const startTimeStr = elem.querySelector(Utils.parseClxsStr(start))
+          .innerHTML;
+        const endTimeStr = elem.querySelector(Utils.parseClxsStr(end))
+          .innerHTML;
+
+        const startT = Utils.formatTime(startTimeStr);
+        const adjust =
+          startTimeStr.split(' ')[1] === 'PM' &&
+          endTimeStr.split(' ')[1] === 'AM'
+            ? 24 * 60
+            : 0;
+        const endT = Utils.formatTime(endTimeStr) + adjust;
+        const split =
+          endTimeStr === 'TBD'
+            ? 'N/A'
+            : Utils.parseTotal(endT - startT - totalWork);
+        const fieldElem = elem.querySelector(Utils.parseClxsStr(field));
+
+        const splitElem = `
+          <div class="Field_Cell ${ssaClass}" style="padding: 2px 6px;">
+            <span class="HolidayBidPreferredDayAssignment_Cell_Label Status_Cell_Label Cell_Label">Split:</span>
+            <span class="HolidayBidPreferredDayAssignment_Cell_Value Status_Cell_Value Cell_Value">${split}</span>
+          </div>`;
+        fieldElem.insertAdjacentHTML('afterend', splitElem);
+      });
+    }
+  },
 };
 
 export default DOM;
